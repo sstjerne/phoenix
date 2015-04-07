@@ -33,6 +33,17 @@
           <include>java.sql.Driver</include>
         </includes>
       </resource>
+      <resource>
+			<filtering>true</filtering>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<excludes>
+					<exclude>lib/</exclude>
+					<exclude>conf/</exclude>
+				</excludes>
+			</resource>
     </resources>
 
     <plugins>
@@ -399,4 +410,79 @@
       <artifactId>hadoop-minicluster</artifactId>
     </dependency>
   </dependencies>
+  
+  <profiles>
+  	<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>local</id>
+			<properties>
+				<log4j.level>ALL</log4j.level>
+				<log4j.rootLogger>FILE</log4j.rootLogger>
+				<log4j.rootLogger.filename>phoenix.log</log4j.rootLogger.filename>
+				<zk.timeout>240000</zk.timeout>
+				<hbase.zookeeper.property.clientPort>2181</hbase.zookeeper.property.clientPort>
+				<hbase.zookeeper.quorum>10.10.0.15</hbase.zookeeper.quorum>
+				<zookeeper.znode.parent>/hbase</zookeeper.znode.parent>
+				<hbase.master>*10.10.0.15:60000*</hbase.master>
+				<hbase.rpc.timeout>120000000</hbase.rpc.timeout>
+				<hbase.client.scanner.timeout.period>120000000</hbase.client.scanner.timeout.period>
+				<hbase.client.scanner.caching>10000</hbase.client.scanner.caching>
+				<phoenix.zookeeper.quorum>10.10.0.15</phoenix.zookeeper.quorum>
+				<phoenix.query.targetConcurrency>32</phoenix.query.targetConcurrency>
+				<phoenix.query.maxConcurrency>64</phoenix.query.maxConcurrency>
+				<phoenix.query.maxIntraRegionParallelization>1</phoenix.query.maxIntraRegionParallelization>
+				<phoenix.query.timeoutMs>18000000</phoenix.query.timeoutMs>
+			</properties>
+			</profile>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>qa</id>
+			<properties>
+				<log4j.level>ALL</log4j.level>
+				<log4j.rootLogger>FILE</log4j.rootLogger>
+				<log4j.rootLogger.filename>phoenix.log</log4j.rootLogger.filename>
+				<zk.timeout>240000</zk.timeout>
+				<hbase.zookeeper.property.clientPort>2181</hbase.zookeeper.property.clientPort>
+				<hbase.zookeeper.quorum>10.10.0.15</hbase.zookeeper.quorum>
+				<zookeeper.znode.parent>/hbase</zookeeper.znode.parent>
+				<hbase.master>*10.10.0.15:60000*</hbase.master>
+				<hbase.rpc.timeout>120000000</hbase.rpc.timeout>
+				<hbase.client.scanner.timeout.period>120000000</hbase.client.scanner.timeout.period>
+				<hbase.client.scanner.caching>10000</hbase.client.scanner.caching>
+				<phoenix.zookeeper.quorum>10.10.0.15</phoenix.zookeeper.quorum>
+				<phoenix.query.targetConcurrency>32</phoenix.query.targetConcurrency>
+				<phoenix.query.maxConcurrency>64</phoenix.query.maxConcurrency>
+				<phoenix.query.maxIntraRegionParallelization>1</phoenix.query.maxIntraRegionParallelization>
+				<phoenix.query.timeoutMs>18000000</phoenix.query.timeoutMs>
+			</properties>
+			</profile>
+			<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>prod</id>
+			<properties>
+				<log4j.level>ALL</log4j.level>
+				<log4j.rootLogger>FILE</log4j.rootLogger>
+				<log4j.rootLogger.filename>phoenix.log</log4j.rootLogger.filename>
+				<zk.timeout>240000</zk.timeout>
+				<hbase.zookeeper.property.clientPort>2181</hbase.zookeeper.property.clientPort>
+				<hbase.zookeeper.quorum>10.10.0.26</hbase.zookeeper.quorum>
+				<zookeeper.znode.parent>/hbase</zookeeper.znode.parent>
+				<hbase.master>*10.10.0.25:60000*</hbase.master>
+				<hbase.rpc.timeout>120000000</hbase.rpc.timeout>
+				<hbase.client.scanner.timeout.period>120000000</hbase.client.scanner.timeout.period>
+				<hbase.client.scanner.caching>10000</hbase.client.scanner.caching>
+				<phoenix.zookeeper.quorum>10.10.0.26</phoenix.zookeeper.quorum>
+				<phoenix.query.targetConcurrency>32</phoenix.query.targetConcurrency>
+				<phoenix.query.maxConcurrency>64</phoenix.query.maxConcurrency>
+				<phoenix.query.maxIntraRegionParallelization>1</phoenix.query.maxIntraRegionParallelization>
+				<phoenix.query.timeoutMs>18000000</phoenix.query.timeoutMs>
+			</properties>
+			</profile>
+		 </profiles>
 </project>

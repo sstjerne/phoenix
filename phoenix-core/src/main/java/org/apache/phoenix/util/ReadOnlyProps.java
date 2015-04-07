@@ -27,6 +27,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 
 /**
  * 
@@ -39,6 +40,8 @@ import com.google.common.collect.ImmutableMap;
 public class ReadOnlyProps implements Iterable<Entry<String, String>> {
     public static final ReadOnlyProps EMPTY_PROPS = new ReadOnlyProps();
     private final Map<String, String> props;
+    
+    private ConfigReader configReader = new ConfigReader();
     
     public ReadOnlyProps(ReadOnlyProps defaultProps, Iterator<Entry<String, String>> iterator) {
         Map<String, String> map = new HashMap<String,String>(defaultProps.asMap());
@@ -58,7 +61,62 @@ public class ReadOnlyProps implements Iterable<Entry<String, String>> {
     }
 
     public ReadOnlyProps(Map<String, String> props) {
-        this.props = ImmutableMap.copyOf(props);
+    	
+    	//MODIFIED READ ONLY PROPS CODE
+	
+    	Map<String, String> newProps = new HashMap<String,String>();
+    	
+    	String hbaseZkPropClientPort = configReader.getValue("hbase.zookeeper.property.clientPort");
+    	String hbaseZkQuorum = configReader.getValue("hbase.zookeeper.quorum");
+    	String zkZnodeParent = configReader.getValue("zookeeper.znode.parent");
+    	String hbaseMaster = configReader.getValue("hbase.master");
+    	String phoenixZkQuorum= configReader.getValue("phoenix.zookeeper.quorum");
+    	String hbaseRpcTimeout= configReader.getValue("hbase.rpc.timeout");
+    	String hbaseClientScannerTimeoutPeriod= configReader.getValue("hbase.client.scanner.timeout.period");
+    	String phoenixQueryTargetConcurrency= configReader.getValue("phoenix.query.targetConcurrency");
+    	String phoenixQueryMaxConcurrency= configReader.getValue("phoenix.query.maxConcurrency");
+    	String phoenixQueryMaxIntraRegionParallelization= configReader.getValue("phoenix.query.maxIntraRegionParallelization");
+    	String hbaseClientScannerCaching= configReader.getValue("hbase.client.scanner.caching");
+    	String phoenixQueryTimeoutMs= configReader.getValue("phoenix.query.timeoutMs");
+    	
+    	newProps.put("hbase.zookeeper.property.clientPort",hbaseZkPropClientPort);
+        newProps.put("hbase.zookeeper.quorum", hbaseZkQuorum);
+        newProps.put("zookeeper.znode.parent",zkZnodeParent);
+        newProps.put("timeout", "240000");
+        newProps.put("hbase.master", hbaseMaster);
+        newProps.put("phoenix.zookeeper.quorum", phoenixZkQuorum);
+        newProps.put("hbase.rpc.timeout", hbaseRpcTimeout);
+        newProps.put("hbase.client.scanner.timeout.period", hbaseClientScannerTimeoutPeriod);
+        newProps.put("phoenix.query.targetConcurrency", phoenixQueryTargetConcurrency);
+        newProps.put("phoenix.query.maxConcurrency", phoenixQueryMaxConcurrency);
+        newProps.put("phoenix.query.maxIntraRegionParallelization", phoenixQueryMaxIntraRegionParallelization);
+        newProps.put("hbase.client.scanner.caching", hbaseClientScannerCaching);
+        newProps.put("phoenix.query.timeoutMs",phoenixQueryTimeoutMs);
+        
+       /*
+    	newProps.put("hbase.zookeeper.property.clientPort", "2181");
+        newProps.put("hbase.zookeeper.quorum", "10.10.0.15");
+        newProps.put("zookeeper.znode.parent","/hbase");
+        newProps.put("timeout", "240000");
+        newProps.put("hbase.master", "*10.10.0.15:60000*");
+        newProps.put("phoenix.zookeeper.quorum", "10.10.0.15");
+        newProps.put("hbase.rpc.timeout", "120000000");
+        newProps.put("hbase.client.scanner.timeout.period", "1200000");
+        newProps.put("phoenix.query.targetConcurrency", "32");
+        newProps.put("phoenix.query.maxConcurrency", "64");
+        newProps.put("phoenix.query.maxIntraRegionParallelization", "1");
+        newProps.put("hbase.client.scanner.caching", "10000");
+        newProps.put("phoenix.query.timeoutMs","18000000");
+        */
+
+        System.out.println("jude -> " + newProps);
+        Map<String, String> tmpAugmentedProps = Maps.newHashMapWithExpectedSize(newProps.size() + props.size());
+
+        tmpAugmentedProps.putAll(newProps);
+        tmpAugmentedProps.putAll((Map)props);
+
+        this.props = ImmutableMap.copyOf(tmpAugmentedProps);
+
     }
 
     private static Pattern varPat = Pattern.compile("\\$\\{[^\\}\\$\u0020]+\\}");
