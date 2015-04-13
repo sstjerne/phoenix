@@ -1,5 +1,7 @@
 package org.apache.phoenix.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map.Entry;
@@ -21,7 +23,7 @@ public class ConfigReader {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ConfigReader.class.getName());
 	
-	private static final String PHOENIX_PROPERTIES_FILE = "phoenix.properties";
+	private static final String PHOENIX_PROPERTIES_FILE = "gm.phoenix.properties";
 
 	private static Properties properties = new Properties();
 
@@ -31,7 +33,7 @@ public class ConfigReader {
 	 * Creates ConfigReader instance and call function to load properties into application memory.
 	 */
 	public ConfigReader() {
-		LOGGER.info("Constructor: Load Phoenix properties file...");
+		LOGGER.info("Constructor: Load GM Phoenix properties file...");
 		this.loadPropertyFile(PHOENIX_PROPERTIES_FILE);
 	}
 
@@ -51,9 +53,15 @@ public class ConfigReader {
 	 */
 	private void loadPropertyFile(Class clazz, String propertiesFile) {
 		try {
-			ClassLoader classLoader = ConfigReader.class.getClassLoader();
-			properties.load(classLoader.getResourceAsStream(propertiesFile));
-			LOGGER.info("Load Properties from classpath... " + propertiesFile);
+			if (new File(propertiesFile).exists()) {
+				properties.load(new FileInputStream(propertiesFile));
+			} else if (new File("src/main/resources/" + propertiesFile).exists()) {
+				properties.load(new FileInputStream("src/main/resources/"+ propertiesFile));
+			}else {
+				ClassLoader classLoader = ConfigReader.class.getClassLoader();
+				properties.load(classLoader.getResourceAsStream(propertiesFile));
+				LOGGER.info("Load Properties from classpath... " + propertiesFile);
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage());

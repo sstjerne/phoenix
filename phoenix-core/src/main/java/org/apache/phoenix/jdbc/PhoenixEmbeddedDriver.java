@@ -40,6 +40,7 @@ import org.apache.phoenix.util.PhoenixRuntime;
 import org.apache.phoenix.util.PropertiesUtil;
 import org.apache.phoenix.util.ReadOnlyProps;
 import org.apache.phoenix.util.SQLCloseable;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -55,6 +56,7 @@ import com.google.common.collect.Maps;
  */
 @Immutable
 public abstract class PhoenixEmbeddedDriver implements Driver, org.apache.phoenix.jdbc.Jdbc7Shim.Driver, SQLCloseable {
+	
     /**
      * The protocol for Phoenix Network Client 
      */ 
@@ -120,8 +122,9 @@ public abstract class PhoenixEmbeddedDriver implements Driver, org.apache.phoeni
         if (!acceptsURL(url)) {
             return null;
         }
-
+ 
         Properties augmentedInfo = PropertiesUtil.deepCopy(info);
+        
         augmentedInfo.putAll(getDefaultProps().asMap());
         ConnectionQueryServices connectionServices = getConnectionQueryServices(url, augmentedInfo);
         PhoenixConnection connection = connectionServices.connect(url, augmentedInfo);

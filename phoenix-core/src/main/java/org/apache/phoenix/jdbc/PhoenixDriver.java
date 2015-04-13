@@ -138,6 +138,7 @@ public final class PhoenixDriver extends PhoenixEmbeddedDriver {
     
     @Override
     protected ConnectionQueryServices getConnectionQueryServices(String url, Properties info) throws SQLException {
+    	
         try {
             closeLock.readLock().lock();
             checkClosed();

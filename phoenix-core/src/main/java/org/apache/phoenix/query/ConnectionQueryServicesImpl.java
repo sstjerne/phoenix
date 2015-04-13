@@ -206,8 +206,10 @@ public class ConnectionQueryServicesImpl extends DelegateQueryServices implement
     public ConnectionQueryServicesImpl(QueryServices services, ConnectionInfo connectionInfo, Properties info) {
         super(services);
         Configuration config = HBaseFactoryProvider.getConfigurationFactory().getConfiguration();
+       
         for (Entry<String,String> entry : services.getProps()) {
             config.set(entry.getKey(), entry.getValue());
+            
         }
         if (info != null) {
             for (Object key : info.keySet()) {
@@ -217,13 +219,13 @@ public class ConnectionQueryServicesImpl extends DelegateQueryServices implement
         for (Entry<String,String> entry : connectionInfo.asProps()) {
             config.set(entry.getKey(), entry.getValue());
         }
-
+ 
         // Without making a copy of the configuration we cons up, we lose some of our properties
         // on the server side during testing.
         this.config = HBaseFactoryProvider.getConfigurationFactory().getConfiguration(config);
         // set replication required parameter
         ConfigUtil.setReplicationConfigIfAbsent(this.config);
-        this.props = new ReadOnlyProps(this.config.iterator());
+        this.props = new ReadOnlyProps(this.config.iterator());  
         this.userName = connectionInfo.getPrincipal();
         this.latestMetaData = newEmptyMetaData();
         // TODO: should we track connection wide memory usage or just org-wide usage?

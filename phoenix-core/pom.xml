@@ -423,13 +423,13 @@
 				<log4j.rootLogger.filename>phoenix.log</log4j.rootLogger.filename>
 				<zk.timeout>240000</zk.timeout>
 				<hbase.zookeeper.property.clientPort>2181</hbase.zookeeper.property.clientPort>
-				<hbase.zookeeper.quorum>10.10.0.15</hbase.zookeeper.quorum>
+				<hbase.zookeeper.quorum>127.0.0.1</hbase.zookeeper.quorum>
 				<zookeeper.znode.parent>/hbase</zookeeper.znode.parent>
-				<hbase.master>*10.10.0.15:60000*</hbase.master>
+				<hbase.master>*127.0.0.1:60000*</hbase.master>
 				<hbase.rpc.timeout>120000000</hbase.rpc.timeout>
 				<hbase.client.scanner.timeout.period>120000000</hbase.client.scanner.timeout.period>
 				<hbase.client.scanner.caching>10000</hbase.client.scanner.caching>
-				<phoenix.zookeeper.quorum>10.10.0.15</phoenix.zookeeper.quorum>
+				<phoenix.zookeeper.quorum>127.0.0.1</phoenix.zookeeper.quorum>
 				<phoenix.query.targetConcurrency>32</phoenix.query.targetConcurrency>
 				<phoenix.query.maxConcurrency>64</phoenix.query.maxConcurrency>
 				<phoenix.query.maxIntraRegionParallelization>1</phoenix.query.maxIntraRegionParallelization>
